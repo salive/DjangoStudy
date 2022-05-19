@@ -1,0 +1,52 @@
+div {
+    display: inline-block;
+    position: relative;
+}
+
+div.show_preview {
+    margin: 20px;
+    display: inline-block;
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: rgb(219, 219, 219);
+    width: available;
+}
+
+.inline_preview {
+    position: relative;
+    vertical-align: top;
+    width: 200px;
+}
+
+div.films {
+    padding: 0px;
+}
+
+a.show_preview {
+    position: relative;
+    padding: 10px;
+    padding-top: 0px;
+    text-align: justify;
+    text-decoration: none;
+    font-size: 16pt;
+
+
+}
+
+p.show_preview {
+    position: relative;
+    padding: 10px;
+    margin: 0px;
+    text-align: left;
+
+}
+
+img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 150px;
+    position: relative;
+
+}

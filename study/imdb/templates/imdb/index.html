@@ -1,0 +1,30 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'imdb/style.css' %}">
+
+<head>
+    <title>
+        Главная страница
+    </title>
+
+
+</head>
+
+<h1> Привет </h1>
+
+<body>
+
+    {% for show in shows %}
+
+    <div class="films">
+        <div class="show_preview">
+            <img src="{{show.poster.url}}">
+            <div class="inline_preview">
+                <a class="show_preview" href="#">{{show.name}}</a>
+                <p class="show_preview">Год: {{show.year}}</p>
+                <p class="show_preview">
+                    {{show.annotation}} </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</body>

@@ -3,3 +3,7 @@
 /.vscode
 .env
 /study/study/settings.py
+/study/imdb/migrations
+*.png
+
+study/db.sqlite3
