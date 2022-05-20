@@ -4,7 +4,5 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('search/', views.search, name='search')
 ] + staticfiles_urlpatterns()
-
-
-print(urlpatterns)

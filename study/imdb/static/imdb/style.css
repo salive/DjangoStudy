@@ -13,6 +13,16 @@ div.show_preview {
     width: available;
 }
 
+div.show_preview_search {
+    margin: 20px;
+    display: inline-block;
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: rgb(219, 219, 219);
+    width: available;
+}
+
 .inline_preview {
     position: relative;
     vertical-align: top;

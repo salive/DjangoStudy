@@ -1,0 +1,38 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'imdb/style.css' %}">
+
+<head>
+    <title>
+        Поиск
+    </title>
+    <base target="_blank">
+</head>
+
+<h1> Поиск</h1>
+<form name="test" method="post">
+    {% csrf_token %}
+    <p><b>Что ищем?:</b><br>
+        {{form.search}}
+    </p>
+    <p><input type="submit" value="Отправить"></p>
+
+</form>
+
+{% if movies %}
+{%for image, title, href in movies%}
+<div class="films">
+    <div class="show_preview">
+        <img src="https://www.film.ru/{{image}}">
+        <div class="inline_preview">
+            <a class="show_preview" href="https://www.film.ru{{href}}">{{title}}</a>
+
+        </div>
+    </div>
+</div>
+
+
+{% endfor %}
+{% endif %}
+
+<body>
+</body>
