@@ -7,11 +7,13 @@ HEADERS = {
 
 
 def parse(target):
-    print(target)
+    result = []
     response = requests.get(target, headers=HEADERS)
     soup = BeautifulSoup(response.text, 'html.parser')
-    movies = soup.find('div', class_='rating').find_all('a')
-    result = []
+    try:
+        movies = soup.find('div', class_='rating').find_all('a')
+    except:
+        return result
     for m in movies:
         href = m['href']
         image = m.find('img')['src']
