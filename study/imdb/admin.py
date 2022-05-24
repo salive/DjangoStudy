@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import User, Show, UserShows
-admin.site.register(User)
+from .models import Profile, Show
+admin.site.register(Profile)
 admin.site.register(Show)
-admin.site.register(UserShows)

@@ -1,19 +1,9 @@
 from django.db import models
-from django.forms import DecimalField, FloatField
+from django.forms import FloatField
 from study import settings
-
-
-class User(models.Model):
-    name = models.CharField(max_length=30)
-    email = models.EmailField(blank=False)
-    password = models.CharField(max_length=100)
-
-    class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
-
-    def __str__(self) -> str:
-        return f'User: {self.name}'
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Show(models.Model):
@@ -31,8 +21,20 @@ class Show(models.Model):
         return self.name
 
 
-class UserShows(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    show = models.ForeignKey(Show, on_delete=models.CASCADE)
-    seen = models.BooleanField()
-    user_rating = models.IntegerField(blank=True, default=0)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    shows = models.ManyToManyField(Show, related_name='shows')
+
+    def __str__(self):
+        return str(self.user)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
