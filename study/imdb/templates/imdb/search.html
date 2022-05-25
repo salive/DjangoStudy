@@ -12,122 +12,60 @@
 
 <body>
 
-    <div class="main" style="width: 100%;">
-        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; height: 100%;">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-                <svg class="bi pe-none me-2" width="40" height="32">
-                    <use xlink:href="#bootstrap"></use>
-                </svg>
-                <span class="fs-4">Sidebar</span>
-            </a>
-            <hr>
-            <form action="{% url 'search' %}" class="d-flex" role="search">
+    {% include "left_column.html" %}
 
-                <input class="form-control me-2" name="find" type="search" placeholder="Что ищем?"
-                    aria-label="Что ищем?">
-                <button class="btn btn-outline-primary" type="submit">Найти</button>
-            </form>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="#" class="nav-link active" aria-current="page">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#home"></use>
-                        </svg>
-                        Home
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link link-dark">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#speedometer2"></use>
-                        </svg>
-                        Dashboard
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link link-dark">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#table"></use>
-                        </svg>
-                        Orders
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link link-dark">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#grid"></use>
-                        </svg>
-                        Products
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link link-dark">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle"></use>
-                        </svg>
-                        Customers
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
-                    id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                    <strong>mdo</strong>
-                </a>
-                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="">
-                    <li><a class="dropdown-item" href="#">New project...</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
-                </ul>
+
+
+    <div style="margin-top: 60;">
+        {% if local_shows %}
+        <strong style="padding: 5px; font-size:16pt;">Найдено в локальной базе:</strong>
+        <div class="films">
+
+            {% for image, title in local_shows %}
+            <div>
+                <img src="{{image}}">
+                <div class="inline_preview">
+                    <a class="show_preview" href="#">{{title}}</a>
+
+                </div>
             </div>
+            {% endfor %}
         </div>
 
+        {%endif%}
+
+        {% if shows %}
+        <strong style="padding: 5px; font-size:16pt;">Найдено на Кинопоиск:</strong>
 
 
-        <div style="margin-top: 60;">
-            {% if local_shows %}
-            <strong style="padding: 5px; font-size:16pt;">Найдено в локальной базе:</strong>
-            <div class="films">
-
-                {% for image, title in local_shows %}
-                <div>
-                    <img src="{{image}}">
-                    <div class="inline_preview">
-                        <a class="show_preview" href="#">{{title}}</a>
-
-                    </div>
+        <div class="films">
+            {%for id, title, year, desc, poster, rating in shows%}
+            <div class="card" style="width: 350px;">
+                <img class="card-img-top" src="{{poster}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{title}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Год: {{year}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Рейтинг KP: {{rating}}</h6>
+                    <p class="card-text">{{desc}}</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="user" value="{{user}}">
+                        <input type="hidden" name="action" value="add_show_to_user_profile">
+                        <input type="hidden" name="id" value="{{id}}">
+                        <input type="hidden" name="title" value="{{title}}">
+                        <input type="hidden" name="year" value="{{year}}">
+                        <input type="hidden" name="poster" value="{{poster}}">
+                        <input type="hidden" name="desc" value="{{desc}}">
+                        <input type="hidden" name="rating" value="{{rating}}">
+                        <input type="submit" class="btn btn-success" value="Буду смотреть!">
+                    </form>
                 </div>
-                {% endfor %}
             </div>
 
-            {%endif%}
-
-            {% if filmru_shows %}
-            <strong style="padding: 5px; font-size:16pt;">Найдено на film.ru:</strong>
-
-
-            <div class="films">
-                {%for image, title, href in filmru_shows%}
-                <div class="card" style="max-width: 300px;">
-                    <img class="card-img-top" src="https://www.film.ru/{{image}}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{title}}</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                            of the card's content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-
-                {% endfor %}
-            </div>
-
+            {% endfor %}
         </div>
+
+    </div>
     </div>
 
 

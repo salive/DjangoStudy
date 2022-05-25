@@ -2,9 +2,9 @@
 /.venv
 /.vscode
 .env
-/study/study/settings.py
+
 /study/imdb/migrations
 *.png
+*.jpg
 
-study/db.sqlite3
-study/db.sqlite3
+

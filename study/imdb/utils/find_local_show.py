@@ -8,5 +8,4 @@ def find_local(query):
     except:
         return local_shows
     local_shows.append([shows.poster.url, shows.name])
-    print(local_shows)
     return local_shows

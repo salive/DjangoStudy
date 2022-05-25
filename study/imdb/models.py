@@ -7,10 +7,10 @@ from django.dispatch import receiver
 
 
 class Show(models.Model):
-    name = models.CharField('Название', max_length=100)
+    title = models.CharField('Название', max_length=100)
     year = models.IntegerField('Год')
     poster = models.ImageField(upload_to=settings.STATIC_URL+'imdb/images')
-    annotation = models.TextField()
+    description = models.TextField()
     rating = models.FloatField(blank=True, default=0)
 
     class Meta:
@@ -18,7 +18,7 @@ class Show(models.Model):
         verbose_name_plural = 'Фильмы'
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Profile(models.Model):
