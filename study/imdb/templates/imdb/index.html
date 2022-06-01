@@ -14,25 +14,53 @@
 <body>
 
     {% include "left_column.html" %}
-
-
     <div>
+        <ul class="nav nav-tabs" style="margin-top:27px">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Мои фильмы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'films' %}">Все фильмы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Посмотрел</a>
+            </li>
+            <li class="nav-item">
+                <form action="{% url 'search' %}" class="d-flex" role="search" style="margin-top:2px">
+                    <input class="form-control me-2" name="find" type="search" placeholder="Искать на Кинопоиск"
+                        aria-label="Что ищем?">
+
+                </form>
+            </li>
+        </ul>
         {% if shows %}
         <div class="films">
             {%for item in shows%}
+
             <div class="card" style="width: 350px;">
-                <img class="card-img-top" src="{{item.poster.url}}">
+                <img class="card-img-top" src="{{item.show.poster.url}}">
                 <div class="card-body">
-                    <h5 class="card-title">{{item.title}}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Год: {{item.year}}</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">Рейтинг KP: {{item.rating}}</h6>
-                    <p class="card-text">{{item.description}}</p>
+                    {% if not item.seen %}
+                    <button type="button" class="btn btn-warning btn-sm" disabled>Еще не
+                        смотрел</button>
+                    {% else %}
+                    <button type="button" class="btn btn-success btn-sm" disabled>Смотрел! Моя оценка:
+                        {{item.user_rating}}</button>
+
+                    {% endif %}
+                    <h5 class="card-title">{{item.show.title}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Год: {{item.show.year}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Рейтинг KP: {{item.show.rating}}</h6>
+                    <p class="card-text">{{item.show.description}}</p>
 
                 </div>
             </div>
 
             {% endfor %}
         </div>
+
+        {%else%}
+        <h2>У вас не добавлено ни одного фильма =(</h2>
 
         {% endif %}
 

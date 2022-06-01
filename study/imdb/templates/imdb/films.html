@@ -1,3 +1,4 @@
+<html>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'imdb/style.css' %}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
@@ -5,15 +6,13 @@
 
 <head>
     <title>
-        Поиск
+        Films
     </title>
 
 </head>
 
 <body>
-
     {% include "left_column.html" %}
-
 
     <div>
         <ul class="nav nav-tabs" style="margin-top:27px">
@@ -21,7 +20,7 @@
                 <a class="nav-link" aria-current="page" href="/">Мои фильмы</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'films' %}">Все фильмы</a>
+                <a class="nav-link active" href="{% url 'films' %}">Все фильмы</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Посмотрел</a>
@@ -35,44 +34,47 @@
             </li>
 
         </ul>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Искать</span>
+            </div>
+            <form>
+                <input type="text" class="form-control" aria-label="Default"
+                    aria-describedby="inputGroup-sizing-default">
+            </form>
+
+        </div>
+
         {% if shows %}
-        <strong style="padding: 5px; font-size:16pt;">Найдено на Кинопоиск:</strong>
-
-
         <div class="films">
-            {%for id, title, year, desc, poster, rating in shows%}
+            {%for item in shows%}
             <div class="card" style="width: 350px;">
-                <img class="card-img-top" src="{{poster}}">
+                <img class="card-img-top" src="{{item.poster.url}}">
                 <div class="card-body">
-                    <h5 class="card-title">{{title}}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Год: {{year}}</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">Рейтинг KP: {{rating}}</h6>
-                    <p class="card-text">{{desc}}</p>
                     <form method="post">
                         {% csrf_token %}
                         <input type="hidden" name="user" value="{{user}}">
-                        <input type="hidden" name="action" value="add_show_to_local_database">
-                        <input type="hidden" name="id" value="{{id}}">
-                        <input type="hidden" name="title" value="{{title}}">
-                        <input type="hidden" name="year" value="{{year}}">
-                        <input type="hidden" name="poster" value="{{poster}}">
-                        <input type="hidden" name="desc" value="{{desc}}">
-                        <input type="hidden" name="rating" value="{{rating}}">
-                        <input type="submit" class="btn btn-success" value="Добавить в базу">
+                        <input type="hidden" name="action" value="add_show_to_usershows">
+                        <input type="hidden" name="film_id" value="{{item.id}}">
+                        <input type="submit" class="btn btn-primary btn-sm" value="Буду смотреть!">
                     </form>
+                    <h5 class="card-title">{{item.show.title}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Год: {{item.year}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Рейтинг KP: {{item.rating}}</h6>
+                    <p class="card-text">{{item.description}}</p>
+
+
                 </div>
             </div>
 
             {% endfor %}
         </div>
 
+        {% endif %}
+
     </div>
     </div>
-
-
-    {% else %}
-    <p>Ничего не найдено =(</p>
-    {% endif %}
-
 
 </body>
+
+</html>
