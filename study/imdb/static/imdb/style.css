@@ -4,8 +4,6 @@ div.main {
 }
 
 
-
-
 div.films {
     display: flex;
     flex-wrap: wrap;
@@ -15,8 +13,6 @@ div.films {
 
 }
 
-
-
 img {
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -24,4 +20,20 @@ img {
     width: 150px;
     position: relative;
 
+}
+
+svg:hover {
+    fill: red
+}
+
+watchbtn {
+    width: 100px;
+}
+
+watchbtn:hover {
+    color: green;
+}
+
+watchbtn:hover::before {
+    content: "Посмотрел!";
 }

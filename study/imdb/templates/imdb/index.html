@@ -41,8 +41,12 @@
                 <img class="card-img-top" src="{{item.show.poster.url}}">
                 <div class="card-body">
                     {% if not item.seen %}
-                    <button type="button" class="btn btn-warning btn-sm" disabled>Еще не
-                        смотрел</button>
+                    <form method="post">
+                        {%csrf_token%}
+                        <button type="submit" class="btn btn-warning btn-sm">Еще не
+                            смотрел</button>
+                        {% include "ratingstars.html" %}
+                    </form>
                     {% else %}
                     <button type="button" class="btn btn-success btn-sm" disabled>Смотрел! Моя оценка:
                         {{item.user_rating}}</button>
