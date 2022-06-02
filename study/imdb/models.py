@@ -14,6 +14,9 @@ class Show(models.Model):
         'Постер', upload_to=settings.STATIC_URL+'imdb/images')
     description = models.TextField('Описание')
     rating = models.FloatField('Рейтинг', blank=True, default=0)
+    is_series = models.BooleanField()
+    num_seasons = models.IntegerField('Number of seasons', validators=[
+                                      MinValueValidator(0)], blank=True, null=True)
 
     class Meta:
         verbose_name = 'Фильм'
@@ -21,6 +24,35 @@ class Show(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Season(models.Model):
+    show = models.ForeignKey(
+        Show, on_delete=models.CASCADE, related_name='series')
+    season_number = models.IntegerField(
+        'Season number', validators=[MinValueValidator(0)])
+    num_episodes = models.IntegerField(
+        'Number of episodes', validators=[MinValueValidator(0)])
+    air_date = models.DateField('Air date', blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.show}: season {self.season_number}'
+
+
+class Episode(models.Model):
+    season = models.ForeignKey(
+        Season, on_delete=models.CASCADE, related_name='season')
+    episode_number = models.IntegerField(
+        'Episode number', validators=[MinValueValidator(0)])
+    titleRu = models.CharField(
+        'TitleRU', max_length=100, null=True, blank=True)
+    titleEn = models.CharField(
+        'TitleEN', max_length=100, null=True, blank=True)
+    description = models.TextField('Description', null=True, blank=True)
+    air_date = models.DateField('Air date', null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.season}: episode {self.episode_number}'
 
 
 class UserShows(models.Model):

@@ -21,13 +21,13 @@
                 <a class="nav-link" aria-current="page" href="/">Мои фильмы</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'films' %}">Все фильмы</a>
+                <a class="nav-link" href="{% url 'imdb:films' %}">Все фильмы</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Посмотрел</a>
             </li>
             <li class="nav-item">
-                <form action="{% url 'search' %}" class="d-flex" role="search" style="margin-top:2px">
+                <form action="{% url 'imdb:search' %}" class="d-flex" role="search" style="margin-top:2px">
                     <input class="form-control me-2" name="find" type="search" placeholder="Искать на Кинопоиск"
                         aria-label="Что ищем?">
 
@@ -40,7 +40,7 @@
 
 
         <div class="films">
-            {%for id, title, year, desc, poster, rating in shows%}
+            {%for id, type, title, year, desc, poster, rating in shows%}
             <div class="card" style="width: 350px;">
                 <img class="card-img-top" src="{{poster}}">
                 <div class="card-body">
@@ -53,6 +53,11 @@
                         <input type="hidden" name="user" value="{{user}}">
                         <input type="hidden" name="action" value="add_show_to_local_database">
                         <input type="hidden" name="id" value="{{id}}">
+                        {% if type == "TV_SERIES" or type == "MINI_SERIES" %}
+                        <input type="hidden" name="is_series" value="True">
+                        {% else %}
+                        <input type="hidden" name="is_series" value="False">
+                        {% endif %}
                         <input type="hidden" name="title" value="{{title}}">
                         <input type="hidden" name="year" value="{{year}}">
                         <input type="hidden" name="poster" value="{{poster}}">

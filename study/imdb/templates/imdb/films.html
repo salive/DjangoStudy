@@ -20,13 +20,13 @@
                 <a class="nav-link" aria-current="page" href="/">Мои фильмы</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="{% url 'films' %}">Все фильмы</a>
+                <a class="nav-link active" href="{% url 'imdb:films' %}">Все фильмы</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Посмотрел</a>
             </li>
             <li class="nav-item">
-                <form action="{% url 'search' %}" class="d-flex" role="search" style="margin-top:2px">
+                <form action="{% url 'imdb:search' %}" class="d-flex" role="search" style="margin-top:2px">
                     <input class="form-control me-2" name="find" type="search" placeholder="Искать на Кинопоиск"
                         aria-label="Что ищем?">
 
@@ -56,9 +56,11 @@
                         <input type="hidden" name="user" value="{{user}}">
                         <input type="hidden" name="action" value="add_show_to_usershows">
                         <input type="hidden" name="film_id" value="{{item.id}}">
-                        <input type="submit" class="btn btn-primary btn-sm" value="Буду смотреть!">
+                        <input type="submit" class="btn btn-primary btn-sm" value="Буду смотреть!" id="submit_button">
                     </form>
-                    <h5 class="card-title">{{item.show.title}}</h5>
+                    <a href="{% url 'imdb:show_detail' item.id %}" target="_blank">
+                        <h5 class="card-title">{{item.title}}</h5>
+                    </a>
                     <h6 class="card-subtitle mb-2 text-muted">Год: {{item.year}}</h6>
                     <h6 class="card-subtitle mb-2 text-muted">Рейтинг KP: {{item.rating}}</h6>
                     <p class="card-text">{{item.description}}</p>
