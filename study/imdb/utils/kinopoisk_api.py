@@ -27,6 +27,7 @@ class KP_API:
     def send_request(target: str | int, type: str) -> list:
         match type:
             case 'keyword':
+                print(URLS[0], target, HEADERS)
                 response = requests.get(URLS[0] + target, headers=HEADERS)
             case 'seasons_info':
                 response = requests.get(
@@ -34,7 +35,7 @@ class KP_API:
         return response.text
 
     @staticmethod
-    def parse_response(target: str, type: str) -> list | dict:
+    def parse_response(target: str, type: str) -> list:
         result = []
         match type:
             case 'seasons_info':
