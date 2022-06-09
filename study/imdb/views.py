@@ -1,8 +1,7 @@
-
-
-from multiprocessing import context
+from django.views import View
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from .forms import SearchForm
 from .models import Show, UserShows
 from .utils.kinopoisk_api import KP_API
@@ -22,7 +21,7 @@ def index(request):
 
 
 def films(request):
-    try:
+    try:                                                       # переписать на middleware!!!!
         shows = Show.objects.all()
         seen = UserShows.objects.select_related('show')
         context = {'shows': shows}
@@ -43,19 +42,23 @@ def show_detail(request, show_id):
     return render(request, 'imdb/show_detail.html', context)
 
 
-def search(request):
+class SearchView(View):
     context = {}
-    if request.GET and request.GET['find']:
-        search_target = request.GET['find']
-        shows = KP_API.parse_response(search_target, 'keyword')
-        context = {
-            "shows": shows
-        }
 
-    if request.POST and request.POST['action'] == 'add_show_to_local_database':
-        add_show_to_local_database(request.POST)
-        if request.POST['is_series'] == 'True':
-            print('Adding seasons')
-            add_seasons_info(request.POST['id'])
+    def get(self, request):
+        if request.GET['find']:
+            search_target = request.GET['find']
+            shows = KP_API.parse_response(search_target, 'keyword')
+            self.context = {
+                "shows": shows
+            }
+        return render(request, 'imdb/search.html', self.context)
 
-    return render(request, 'imdb/search.html', context)
+    def post(self, request):
+        post_request = request.POST
+        if post_request['action'] == 'add_show_to_local_database':
+            add_show_to_local_database(post_request)
+            if post_request['is_series'] == 'True':
+                add_seasons_info(post_request['id'])
+
+        return HttpResponseRedirect(f'/search/?find={request.GET["find"]}')

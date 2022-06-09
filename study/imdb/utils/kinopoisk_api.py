@@ -27,15 +27,16 @@ class KP_API:
     def send_request(target: str | int, type: str) -> list:
         match type:
             case 'keyword':
-                print(URLS[0], target, HEADERS)
                 response = requests.get(URLS[0] + target, headers=HEADERS)
             case 'seasons_info':
                 response = requests.get(
                     URLS[1] + target + '/seasons', headers=HEADERS)
+            case 'show_details':
+                response = requests.get(URLS[1] + target, headers=HEADERS)
         return response.text
 
     @staticmethod
-    def parse_response(target: str, type: str) -> list:
+    def parse_response(target: str | int, type: str) -> list:
         result = []
         match type:
             case 'seasons_info':
@@ -56,5 +57,11 @@ class KP_API:
                     for show in response['films']:
                         result.append([show.get('filmId', ''), show.get('type', ''), show.get('nameRu', ''), show.get('year', ''),
                                        show.get('description', ''), show.get('posterUrl', ''), show.get('rating', 'N/A')])
+
+            case 'show_details':
+                response = json.loads(KP_API.send_request(
+                    f'{target}', type=type))
+                if response:
+                    return response['posterUrl'], response['nameRu'], response['nameOriginal'], response['year'], response['description']
 
         return result

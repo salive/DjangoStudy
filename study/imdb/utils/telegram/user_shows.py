@@ -11,13 +11,12 @@ def get_user_shows_list(user_telegram_id):
     except:
         raise DatabaseError('Sometgong went wrong')
 
-    print(shows)
     return shows
 
 
-def format_show_message(show: list):
-    image = show[-2]
-    text = f"Название: {show[2]}\n\n" \
+def format_show_details(show: list):
+    image = show[0]
+    text = f"Название: \n {show[1]} | {show[2]}\n\n" \
            f"Год: {show[3]}\n\n" \
            f"Описание: {show[4]}\n\n"
     return image, text

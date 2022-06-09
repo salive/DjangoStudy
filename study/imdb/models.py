@@ -57,7 +57,7 @@ class Episode(models.Model):
 
 class UserShows(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='user')
+        User, on_delete=models.CASCADE, related_name='usershows_user')
     show = models.ForeignKey(
         Show, related_name='user_show', on_delete=models.CASCADE)
     seen = models.BooleanField(null=True, blank=True)
@@ -72,3 +72,9 @@ class UserShows(models.Model):
 
     def __str__(self):
         return f'{self.user}: {self.show}'
+
+
+class UserTelegramSettings(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='telegram_settings_user')
+    shows_per_request = models.IntegerField(default=1)
