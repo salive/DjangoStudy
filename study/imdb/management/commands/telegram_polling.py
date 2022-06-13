@@ -1,11 +1,10 @@
 from xml.dom.domreg import registered
 from django.core.management.base import BaseCommand, CommandError
-from imdb.telegram_bot.bot import TelegramBot
+import imdb.telegram_bot.bot as bot
 
 
 class Command(BaseCommand):
     help = 'Shows telegram bot'
 
     def handle(self, *args, **options):
-        bot = TelegramBot()
-        bot.start_polling()
+        bot.bot.polling(none_stop=True, interval=1)

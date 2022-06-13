@@ -6,7 +6,7 @@ from .forms import SearchForm
 from .models import Show, UserShows
 from .utils.kinopoisk_api import KP_API
 from .utils.find_local_show import find_local
-from .utils.post_utils import add_show_to_local_database, add_usershow, add_seasons_info
+from .utils.shows_add_utils import add_show_to_local_database, add_usershow, add_seasons_info
 
 
 def index(request):

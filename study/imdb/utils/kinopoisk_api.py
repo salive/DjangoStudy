@@ -62,6 +62,7 @@ class KP_API:
                 response = json.loads(KP_API.send_request(
                     f'{target}', type=type))
                 if response:
-                    return response['posterUrl'], response['nameRu'], response['nameOriginal'], response['year'], response['description']
+                    return (response['posterUrl'], response['nameRu'], response['nameOriginal'],
+                            response['ratingKinopoisk'], response['year'], response['description'], response['type'])
 
         return result

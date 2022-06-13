@@ -1,13 +1,17 @@
 from django.contrib.auth.models import User
 from imdb.models import UserTelegramSettings
 from psycopg2 import DatabaseError
+from asgiref.sync import sync_to_async
 
 
 def check_registered_user(user_telegram_id):
+    print('check called')
     try:
-        user = User.objects.get(username=user_telegram_id)
+        user = User.objects.get(username=str(user_telegram_id))
+        print(f'User ok: {user=}')
         return True
-    except:
+    except Exception as ex:
+        print(ex)
         return False
 
 
