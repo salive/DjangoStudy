@@ -105,9 +105,9 @@ def list_inline_markup(user_id, current_page: int, filter: str) -> InlineKeyboar
     pages = ((len(all_user_shows)) // 5) + 1
     markup = InlineKeyboardMarkup()
     next_button = InlineKeyboardButton(
-        text=f'>>> Вперед: {current_page + 1} из {pages}', callback_data=f'next_page {current_page + 1} {filter}')
+        text=f'Стр. {current_page} из {pages} >>> Вперед', callback_data=f'next_page {current_page + 1} {filter}')
     prev_button = InlineKeyboardButton(
-        text=f'<<< Назад: {current_page - 1} из {pages}', callback_data=f'next_page {current_page - 1} {filter}')
+        text=f'<<< Назад: {current_page} из {pages}', callback_data=f'next_page {current_page - 1} {filter}')
     for show in shows_to_print.shows:
         details_button = InlineKeyboardButton(
             text=f'{show.show.title}: {show.show.year}', callback_data=f'show_details {show.show.id}')

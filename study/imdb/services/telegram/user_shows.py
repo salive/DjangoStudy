@@ -103,8 +103,6 @@ def subscribe_on_updates(user_id, show_id, value: bool):
     try:
         show = UserShows.objects.filter(user__username=user_id, show__id=show_id).update(
             subscribed_on_updates=value)
-        print('DB check')
-
         return True
     except Exception as ex:
         print(ex)

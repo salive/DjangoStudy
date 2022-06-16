@@ -110,7 +110,6 @@ def handle_call(call):
             bot.answer_callback_query(callback_query_id=call.id)
 
         case 'season_info':
-            print(f'Season info {call.data}')
             if data.filter == 'back':
                 bot.edit_message_reply_markup(
                     call.message.chat.id, call.message.id, reply_markup=seasons_inline_markup(data.data))
@@ -122,7 +121,6 @@ def handle_call(call):
 
         case 'episode_info':
             if data.filter == 'back':
-                print(f"Back recieved {call.data}")
                 bot.edit_message_reply_markup(
                     call.message.chat.id, call.message.id, reply_markup=episodes_inline_markup(data.data, data.id_1))
                 bot.answer_callback_query(callback_query_id=call.id)
