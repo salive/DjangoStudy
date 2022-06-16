@@ -12,11 +12,9 @@ class Show(models.Model):
     year = models.IntegerField('Год')
     poster = models.ImageField(
         'Постер', upload_to=settings.STATIC_URL+'imdb/images')
-    description = models.TextField('Описание')
-    rating = models.FloatField('Рейтинг', blank=True, default=0)
-    is_series = models.BooleanField()
-    num_seasons = models.IntegerField('Number of seasons', validators=[
-                                      MinValueValidator(0)], blank=True, null=True)
+    description = models.TextField('Описание', null=True)
+    rating = models.FloatField('Рейтинг', null=True, default=0)
+    is_series = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Фильм'
@@ -60,7 +58,8 @@ class UserShows(models.Model):
         User, on_delete=models.CASCADE, related_name='usershows_user')
     show = models.ForeignKey(
         Show, related_name='user_show', on_delete=models.CASCADE)
-    seen = models.BooleanField(null=True, blank=True)
+    seen = models.BooleanField(default=False)
+    subscribed_on_updates = models.BooleanField(default=False)
     user_rating = models.IntegerField(
         null=True,
         blank=True,

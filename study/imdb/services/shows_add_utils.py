@@ -18,14 +18,18 @@ def add_usershow(user_id, show_id):
     Добавляет фильм в пользовательские фильмы 
     Возвращает True при успешном добавлении, False если шоу уже в списке пользователя
     '''
+    if check_usershow_exists(user_id, show_id):
+        return False
+
     add_show_to_local_database(show_id)
-    if not check_usershow_exists(user_id, show_id):
+    try:
         usershow = UserShows(
             user=User.objects.get(username=user_id),
             show=Show.objects.get(id=show_id))
         usershow.save()
-        return True
-    return False
+    except Exception as ex:
+        print(ex)
+    return True
 
 
 def add_seasons_info(kinopoisk_id: str):
@@ -64,34 +68,23 @@ def add_show_to_local_database(kinopoisk_id):
         return False
 
     show_details = KP_API.parse_response(kinopoisk_id, 'show_details')
-
-    show_id = kinopoisk_id
-    show_poster = show_details[0]
-    img_data = requests.get(show_poster).content
+    img_data = requests.get(show_details.poster).content
     img_path = '\\imdb\\static\\imdb\\images\\'
-    with open(f'{settings.BASE_DIR}{img_path}{show_id}.jpg', 'wb') as img:
+    with open(f'{settings.BASE_DIR}{img_path}{kinopoisk_id}.jpg', 'wb') as img:
         img.write(img_data)
-    show_title = show_details[1]
-    show_rating = show_details[3]
-    show_year = int(show_details[4])
-    show_desription = show_details[5]
-    if show_details[6] in ['TV_SERIES',  'MINI_SERIES']:
-        show_is_series = True
-    else:
-        show_is_series = False
 
     try:
-        new_show = Show(id=show_id,
-                        title=show_title,
-                        year=show_year,
-                        poster=f'{img_path}{show_id}.jpg',
-                        rating=show_rating,
-                        description=show_desription,
-                        is_series=show_is_series)
+        new_show = Show(id=show_details.kinopoisk_id,
+                        title=show_details.title_ru,
+                        year=show_details.year,
+                        poster=f'{img_path}{id}.jpg',
+                        rating=show_details.rating,
+                        description=show_details.description,
+                        is_series=show_details.is_series)
 
     except:
         raise DatabaseError('Something went wrong')
 
     new_show.save()
-    if show_is_series:
+    if show_details.is_series:
         add_seasons_info(kinopoisk_id)
