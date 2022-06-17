@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from imdb.models import UserTelegramSettings
 from psycopg2 import DatabaseError
 from imdb.telegram_bot import bot as TeleBot
-from imdb.services.telegram.markups import find_results_markup
+from imdb.services.telegram.markups import find_results_markup, default_keyboard_markup
 
 
 def check_registered_user(user_telegram_id):
@@ -32,7 +32,7 @@ def user_register(message):
         user_settings.save()
         TeleBot.bot.authenticated_users[message.from_user.id] = True
         TeleBot.bot.send_message(message.from_user.id,
-                                 "Добро пожаловать!", reply_markup=TeleBot.default_markup())
+                                 "Добро пожаловать!", reply_markup=TeleBot.default_keyboard_markup())
         return True
     except Exception as ex:
         raise ex

@@ -4,9 +4,9 @@ from functools import wraps
 from django.conf import settings
 from psycopg2 import DatabaseError
 from telebot import TeleBot, types
-from imdb.services.telegram.user_utils import check_registered_user, user_register, get_username_by_telegram_id, find_show
-from imdb.services.telegram.user_shows import get_user_shows, format_show_details,\
-    mark_show_as_seen, delete_show, check_show_is_seen, get_user_rating, subscribe_on_updates
+from imdb.services.telegram.user_utils import check_registered_user, user_register, find_show
+from imdb.services.telegram.user_shows import format_show_details,\
+    mark_show_as_seen, delete_show, check_show_is_seen, get_user_rating, subscribe_on_updates, get_episode_info, check_show_is_series
 from imdb.services.telegram.utils import process_callback_data
 from imdb.services.telegram.markups import default_keyboard_markup, list_inline_markup, delete_confirmation_markup, \
     details_inline_markup, seasons_inline_markup, episodes_inline_markup, episode_info_inline_markup
@@ -78,7 +78,7 @@ def handle_call(call):
             result = add_usershow(call.from_user.id, data.data)
             if result:
                 bot.edit_message_reply_markup(
-                    call.message.chat.id, call.message.id, reply_markup=details_inline_markup(call.from_user.id, data.data))
+                    call.message.chat.id, call.message.id, reply_markup=details_inline_markup(call.from_user.id, data.data, check_show_is_series(data.data)))
             else:
                 bot.send_message(call.from_user.id,
                                  'Упс! Уже есть в твоем списке', reply_markup=default_keyboard_markup())
@@ -125,9 +125,13 @@ def handle_call(call):
                     call.message.chat.id, call.message.id, reply_markup=episodes_inline_markup(data.data, data.id_1))
                 bot.answer_callback_query(callback_query_id=call.id)
                 return
-
-            bot.edit_message_reply_markup(
-                call.message.chat.id, call.message.id, reply_markup=episode_info_inline_markup(data.data, data.id_1, data.id_2))
+            episode = get_episode_info(data.data)
+            bot.send_message(
+                call.from_user.id,
+                text=f"\n{episode.titleRu} | {episode.titleEn}\n\n"
+                f"Дата выхода: {episode.air_date}\n\n"
+                f"{episode.description}\n\n",
+                reply_markup=episode_info_inline_markup(data.data, data.id_1, data.id_2))
             bot.answer_callback_query(callback_query_id=call.id)
 
         case 'subscribe':

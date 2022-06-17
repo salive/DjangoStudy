@@ -1,6 +1,6 @@
 from psycopg2 import DatabaseError
 from telebot.types import InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton
-from imdb.services.telegram.user_shows import get_user_shows, check_show_is_seen, get_user_rating, get_seasons, is_subscribed_on_updates, get_episodes, get_episode_info
+from imdb.services.telegram.user_shows import get_user_shows, check_show_is_seen, get_user_rating, get_seasons, is_subscribed_on_updates, get_episodes
 from imdb.services.shows_add_utils import check_usershow_exists
 from imdb.services.kinopoisk_api import KP_API
 from collections import namedtuple
@@ -141,13 +141,19 @@ def seasons_inline_markup(show_id) -> InlineKeyboardMarkup:
 
 
 def episodes_inline_markup(season_id, show_id) -> InlineKeyboardMarkup:
-    markup = InlineKeyboardMarkup()
+    items_in_row = 5
+    markup_row = []
     episodes = get_episodes(season_id)
+    length = len(episodes)
     if not episodes:
         return None
-    for episode in episodes:
-        markup.add(InlineKeyboardButton(
-            text=f'{episode.episode_number}', callback_data=f'episode_info {episode.id} pass {season_id} {show_id}'))
+    for i in range(length // items_in_row):
+        markup_row.append([InlineKeyboardButton(text=f'{episode.episode_number}', callback_data=f'episode_info {episode.id} pass {season_id} {show_id}')
+                           for episode in episodes[i*items_in_row:items_in_row*(i+1)]])
+
+    markup_row.append([InlineKeyboardButton(text=f'{episode.episode_number}', callback_data=f'episode_info {episode.id} pass {season_id} {show_id}')
+                       for episode in episodes[length-length % items_in_row:length]])
+    markup = InlineKeyboardMarkup(markup_row)
     markup.add(InlineKeyboardButton(text='<<< НАЗАД',
                callback_data=f'season_info {show_id} back'))
     return markup
@@ -155,6 +161,7 @@ def episodes_inline_markup(season_id, show_id) -> InlineKeyboardMarkup:
 
 def episode_info_inline_markup(episode_id, season_id, show_id) -> InlineKeyboardMarkup:
     markup = InlineKeyboardMarkup()
+
     markup.add(InlineKeyboardButton(text='<<< НАЗАД',
                callback_data=f'episode_info {season_id} back {show_id}'))
     return markup

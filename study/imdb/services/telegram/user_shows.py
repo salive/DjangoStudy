@@ -54,6 +54,15 @@ def check_show_is_seen(user_id, show_id):
         pass
 
 
+def check_show_is_series(show_id):
+    try:
+        show = Show.objects.get(
+            id=show_id)
+        return show.is_series
+    except:
+        pass
+
+
 def get_user_rating(user_id, show_id):
     try:
         show = UserShows.objects.get(
@@ -83,7 +92,7 @@ def get_seasons(show_id):
 
 def get_episodes(season_id):
     try:
-        episodes = Episode.objects.filter(season__id=season_id)
+        episodes = Episode.objects.filter(season__id=season_id).order_by('id')
         return episodes
     except Exception as ex:
         print(ex)
@@ -92,7 +101,7 @@ def get_episodes(season_id):
 
 def get_episode_info(episode_id) -> Episode:
     try:
-        episode_info = Episode.objects.get(episode_id=episode_id)
+        episode_info = Episode.objects.get(id=episode_id)
         return episode_info
     except Exception as ex:
         print(ex)
