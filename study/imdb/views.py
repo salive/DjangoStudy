@@ -1,64 +1,82 @@
+from .serializers import ShowSerializer, UserSerializer, UserShowSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from django.views import View
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-from .forms import SearchForm
 from .models import Show, UserShows
-from .services.kinopoisk_api import KP_API
-from .services.find_local_show import find_local
-from .services.shows_add_utils import add_show_to_local_database, add_usershow, add_seasons_info
+from django.contrib.auth.models import User
+from .services.shows_add_utils import add_usershow_from_web
 
 
-def index(request):
-    if request.user.id != None:
-        shows = UserShows.objects.select_related('show').filter(
-            user__id=request.user.id)
+class ShowsList(APIView):
+    serializer_class = ShowSerializer
 
-    else:
+    def get_queryset(self):
         shows = []
+        match self.kwargs['filter']:
+            case 'films':
+                shows = Show.objects.filter(is_series=False).order_by('title')
+            case 'series':
+                shows = Show.objects.filter(is_series=True).order_by('title')
+            case 'all':
+                shows = Show.objects.all().order_by('title')
+        return shows
 
-    return render(request, 'imdb/index.html', {'shows': shows})
+    def get(self, request, *args, **kwargs):
+        shows = self.get_queryset()
+        serializer = ShowSerializer(shows, many=True)
+        return Response(serializer.data)
 
-
-def films(request):
-    try:                                                       # переписать на middleware!!!!
-        shows = Show.objects.all()
-        seen = UserShows.objects.select_related('show')
-        context = {'shows': shows}
-    except:
-        context = {}
-    if request.POST and request.POST['action'] == 'add_show_to_usershows':
-        add_usershow(request.POST)
-    return render(request, 'imdb/films.html', context)
-
-
-def show_detail(request, show_id):
-    context = {}
-    show = get_object_or_404(Show, pk=show_id)
-    if isinstance(show, Show):
-        context = {
-            'show': show
-        }
-    return render(request, 'imdb/show_detail.html', context)
+    permission_classes = ()
 
 
-class SearchView(View):
-    context = {}
+class UserInfo(APIView):
 
-    def get(self, request):
-        if request.GET['find']:
-            search_target = request.GET['find']
-            shows = KP_API.parse_response(search_target, 'keyword')
-            self.context = {
-                "shows": shows
-            }
-        return render(request, 'imdb/search.html', self.context)
+    def get_queryset(self, id):
+        user_info = User.objects.filter(id=id)
+        return user_info
 
-    def post(self, request):
-        post_request = request.POST
-        if post_request['action'] == 'add_show_to_local_database':
-            add_show_to_local_database(post_request)
-            if post_request['is_series'] == 'True':
-                add_seasons_info(post_request['id'])
+    def get(self, request, *args, **kwargs):
+        user_info = self.get_queryset(request.user.id)
+        serializer = UserSerializer(user_info, many=True)
+        return Response(serializer.data)
 
-        return HttpResponseRedirect(f'/search/?find={request.GET["find"]}')
+    permission_classes = (IsAuthenticated,)
+
+
+class UserShowsList(APIView):
+
+    def get_queryset(self, id):
+        user_shows = UserShows.objects.filter(user_id=id)
+        return user_shows
+
+    def get(self, request, *args, **kwargs):
+        user_shows = self.get_queryset(request.user.id)
+        serializer = UserShowSerializer(user_shows, many=True)
+        return Response(serializer.data)
+
+    permission_classes = (IsAuthenticated,)
+
+
+class ShowInfo(APIView):
+    def get_queryset(self, show_id):
+        show_info = get_object_or_404(Show, id=show_id)
+        return show_info
+
+    def get(self, request, *args, **kwargs):
+        show_info = self.get_queryset(kwargs['show_id'])
+        serializer = ShowSerializer(show_info)
+        return Response(serializer.data)
+
+    permission_classes = ()
+
+
+class AddUserShow(APIView):
+    def post(self, request, *args, **kwargs):
+        print(request.data['show_id'], request.user.id)
+        if add_usershow_from_web(request.user.id, request.data['show_id']):
+            return Response({'response': 'ok'})
+        return Response({'response': 'error'})
+    permission_classes = (IsAuthenticated, )

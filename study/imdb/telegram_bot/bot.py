@@ -11,7 +11,7 @@ from imdb.services.telegram.utils import process_callback_data
 from imdb.services.telegram.markups import default_keyboard_markup, list_inline_markup, delete_confirmation_markup, \
     details_inline_markup, seasons_inline_markup, episodes_inline_markup, episode_info_inline_markup
 from imdb.services.kinopoisk_api import KP_API, KPResponse
-from imdb.services.shows_add_utils import add_usershow, check_usershow_exists
+from imdb.services.shows_add_utils import add_usershow_from_telegram, check_usershow_exists
 
 
 class MyTeleBot(TeleBot):
@@ -75,7 +75,7 @@ def handle_call(call):
             bot.answer_callback_query(callback_query_id=call.id)
 
         case 'add':
-            result = add_usershow(call.from_user.id, data.data)
+            result = add_usershow_from_telegram(call.from_user.id, data.data)
             if result:
                 bot.edit_message_reply_markup(
                     call.message.chat.id, call.message.id, reply_markup=details_inline_markup(call.from_user.id, data.data, check_show_is_series(data.data)))

@@ -13,7 +13,22 @@ def check_usershow_exists(user_telegram_id, show_id):
     return False
 
 
-def add_usershow(user_id, show_id):
+def add_usershow_from_web(user_id, show_id):
+    '''
+    Добавляет фильм в пользовательские фильмы при запросе с сайта
+    Возвращает True при успешном добавлении, False если шоу уже в списке пользователя    '''
+    try:
+        usershow = UserShows(
+            user=User.objects.get(id=user_id),
+            show=Show.objects.get(id=show_id))
+        usershow.save()
+    except Exception as ex:
+        print(ex)
+        return False
+    return True
+
+
+def add_usershow_from_telegram(user_id, show_id):
     '''
     Добавляет фильм в пользовательские фильмы 
     Возвращает True при успешном добавлении, False если шоу уже в списке пользователя
@@ -29,6 +44,7 @@ def add_usershow(user_id, show_id):
         usershow.save()
     except Exception as ex:
         print(ex)
+        return False
     return True
 
 
@@ -74,6 +90,7 @@ def add_show_to_local_database(kinopoisk_id):
         img.write(img_data)
 
     try:
+        id = show_details.kinopoisk_id
         new_show = Show(id=show_details.kinopoisk_id,
                         title=show_details.title_ru,
                         year=show_details.year,
