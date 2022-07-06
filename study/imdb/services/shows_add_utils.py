@@ -28,6 +28,17 @@ def add_usershow_from_web(user_id, show_id):
     return True
 
 
+def delete_usershow_from_web(user_id, show_id):
+    try:
+        show = UserShows.objects.filter(
+            user_id=user_id, show__id=show_id)
+        show.delete()
+        return True
+    except:
+        raise DatabaseError('Не удалось удалить')
+        return False
+
+
 def add_usershow_from_telegram(user_id, show_id):
     '''
     Добавляет фильм в пользовательские фильмы 

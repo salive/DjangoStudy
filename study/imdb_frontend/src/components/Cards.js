@@ -1,4 +1,6 @@
 import Card from "./Card"
+import React from 'react'
+
 
 const Cards = ({ shows, setShows, userShows, setUserShows }) => {
     return (
@@ -10,11 +12,12 @@ const Cards = ({ shows, setShows, userShows, setUserShows }) => {
                 id={show.id}
                 year={show.year}
                 title={show.title}
-                poster={show.poster}
+                poster={show.img_web ? show.poster : 'http://localhost:8000' + show.poster}
                 rating={show.rating}
                 description={show.description}
                 is_series={show.is_series}
-                setShows={setShows} />))}
+                setShows={setShows}
+            />))}
         </div>
     )
 }

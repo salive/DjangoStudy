@@ -77,3 +77,7 @@ class UserTelegramSettings(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='telegram_settings_user')
     shows_per_request = models.IntegerField(default=1)
+
+
+class Genre(models.Model):
+    genre = models.CharField('Жанр', max_length=30)

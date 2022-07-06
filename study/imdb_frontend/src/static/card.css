@@ -1,0 +1,145 @@
+.container {
+
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: start;
+
+}
+
+.card-img-top {
+    width: 300px;
+}
+
+.card-header {
+    background: rgb(230, 230, 230);
+    max-width: fit-content;
+}
+
+button {
+    background-color: #4CAF50;
+    /* Green */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    margin: 6px 3px;
+    transition-duration: 0.1s;
+    cursor: pointer;
+}
+
+.info-btn:hover {
+    background-color: #ebebeb;
+    color: black;
+    border: 2px solid #0079ca;
+}
+
+.info-btn {
+    background-color: #0079ca;
+    color: white;
+    border: 2px solid #0079ca;
+    max-width: 110px;
+    justify-self: center;
+}
+
+.watch-btn:hover {
+    background-color: #ebebeb;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+
+.watch-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50;
+}
+
+.delete-btn:hover {
+    background-color: #ebebeb;
+    color: black;
+    border: 2px solid #c42c2c;
+}
+
+.delete-btn {
+    background-color: #c42c2c;
+    color: white;
+    border: 2px solid #c42c2c;
+
+}
+
+.poster {
+    max-width: fit-content;
+    justify-self: center;
+    align-self: top;
+
+}
+
+.rating {
+    display: flex;
+    align-self: center;
+    justify-self: center;
+}
+
+
+
+.title {
+    height: 50px;
+}
+
+img {
+    max-width: 310px;
+}
+
+img:hover {
+    opacity: 0.6;
+}
+
+
+
+.info-box {
+    padding: 5px;
+    overflow: hidden;
+
+}
+
+.header-info {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.img-container {
+    position: relative;
+}
+
+.rating-box {
+    display: flex;
+    position: absolute;
+    top: 15px;
+    margin-left: -5px;
+    width: 40px;
+    border-radius: 10px;
+}
+
+
+
+/* .actions {
+    display: grid;
+    align-self: center;
+    justify-self: center;
+    padding: 5px;
+} */
+
+.btn-box {
+    width: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.mu-button {
+    margin-left: 10px;
+}

@@ -53,12 +53,13 @@ class KP_API:
         return response.text
 
     @staticmethod
-    def parse_response(target: str | int, type: str) -> KPResponse:
+    def parse_response(target: str | int, type: str, format='local') -> KPResponse:
         result = []
         match type:
             case 'seasons_info':
                 response = json.loads(KP_API.send_request(
                     f'{target}', type=type))
+
                 if response['items']:
                     for season in response['items']:
                         episodes = []
@@ -70,6 +71,8 @@ class KP_API:
             case 'keyword':
                 response = json.loads(KP_API.send_request(
                     f'search-by-keyword?keyword={target}', type=type))
+                if format == 'JSON':
+                    return response['films']
                 if response['films']:
                     for show in response['films']:
                         result.append(KPResponse(kinopoisk_id=show.get('filmId', ''),

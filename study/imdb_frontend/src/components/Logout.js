@@ -1,3 +1,5 @@
+import React from 'react'
+
 async function LogoutUser() {
 
     return fetch('http://localhost:8000/auth/token/logout', {

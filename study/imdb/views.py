@@ -7,7 +7,8 @@ from django.views import View
 from django.shortcuts import render, get_object_or_404
 from .models import Show, UserShows
 from django.contrib.auth.models import User
-from .services.shows_add_utils import add_usershow_from_web
+from .services.shows_add_utils import add_usershow_from_web, delete_usershow_from_web
+from .services.kinopoisk_api import KP_API
 
 
 class ShowsList(APIView):
@@ -75,8 +76,22 @@ class ShowInfo(APIView):
 
 class AddUserShow(APIView):
     def post(self, request, *args, **kwargs):
-        print(request.data['show_id'], request.user.id)
         if add_usershow_from_web(request.user.id, request.data['show_id']):
             return Response({'response': 'ok'})
         return Response({'response': 'error'})
     permission_classes = (IsAuthenticated, )
+
+
+class DeleteUserShow(APIView):
+    def post(self, request, *args, **kwargs):
+        if delete_usershow_from_web(request.user.id, request.data['show_id']):
+            return Response({'response': 'ok'})
+        return Response({'response': 'error'})
+    permission_classes = (IsAuthenticated, )
+
+
+class SearchView(APIView):
+    permission_classes = ()
+
+    def post(self, request, *args, **kwargs):
+        return Response(KP_API.parse_response(request.data['keyword'], 'keyword', 'JSON'))

@@ -1,3 +1,5 @@
+import React from 'react'
+
 import Navbar from './components/Navbar';
 import './App.css';
 import Cards from './components/Cards';
@@ -43,7 +45,7 @@ function App() {
   }
   return (
     <div className="App">
-      <Navbar fetchShows={fetchShows} />
+      <Navbar fetchShows={fetchShows} setShows={setShows} fetchUserShows={fetchUserShows} />
       <Cards userShows={userShows} setUserShows={setUserShows} setShows={setShows} shows={shows} fetchShows={fetchShows} />
     </div>
   );

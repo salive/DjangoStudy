@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400&display=swap');
+@import 'static/navbar.css';
+@import 'static/card.css';
 
 * {
   box-sizing: border-box;
@@ -10,17 +12,15 @@
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 16px;
   line-height: 1.5;
   background: rgb(2, 16, 41);
-
-
 }
 
 .App {
-  display: flex;
-  max-width: 80%;
+  display: block;
+  max-width: 75%;
   margin: 0px auto;
 
 }
@@ -32,72 +32,16 @@ body {
 
 }
 
-.mynavbar .logo {
-  margin: 5px;
-  font-size: 20pt;
-  font-weight: bold;
-  color: #f5f5f5;
-  text-decoration: none;
-
-}
-
-
-
-
-.mynavbar .mynavlink {
-  color: rgb(243, 243, 243);
-  text-decoration: none;
-  font-weight: bold;
-
-}
-
-.mynavbar .mynavlink:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.mynavbar .nav-container {
-  min-width: 200px;
-  margin-top: 100px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-
-
-}
-
-.mynavbar ul {
-  margin: 0px;
-  padding: 0px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: end;
-  list-style-type: none;
-  position: sticky;
-  top: 15px;
-}
-
-.mynavbar ul li {
-  padding: 10px;
-}
-
 .cards {
-  margin-left: 10px;
+  margin-top: 5px;
   display: flex;
   flex-wrap: wrap;
   background: #ebebeb;
-  animation: mymove 10s infinite;
+  justify-content: space-around;
 
 }
 
-@keyframes mymove {
-  50% {
-    box-shadow: -10px 20px 30px rgb(255, 255, 255);
-  }
-}
+
 
 .login-form {
   margin-left: 10px;
@@ -107,80 +51,13 @@ body {
 
 }
 
-
-.card-img-top {
-  width: 300px;
-}
-
-.card-header {
-  background: rgb(230, 230, 230);
-}
-
-button {
-  background-color: #4CAF50;
-  /* Green */
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 14px;
-  margin: 6px 3px;
-  transition-duration: 0.1s;
-  cursor: pointer;
-}
-
-.info-btn:hover {
-  background-color: #ebebeb;
-  color: black;
-  border: 2px solid #0079ca;
-}
-
-.info-btn {
-  background-color: #0079ca;
-  color: white;
-  border: 2px solid #0079ca;
-  max-width: 110px;
-  justify-self: center;
-}
-
-.watch-btn:hover {
-  background-color: #ebebeb;
-  color: black;
-  border: 2px solid #4CAF50;
-}
-
-.watch-btn {
-  background-color: #4CAF50;
-  color: white;
-  border: 2px solid #4CAF50;
-}
-
-.delete-btn:hover {
-  background-color: #ebebeb;
-  color: black;
-  border: 2px solid #c42c2c;
-}
-
-.delete-btn {
-  background-color: #c42c2c;
-  color: white;
-  border: 2px solid #c42c2c;
-
+.Login {
+  display: block;
 }
 
 
-.container {
-  max-width: 650px;
-  margin: 10px auto;
-  padding: 10px;
-  display: grid;
-  grid-template-columns: 40% 60%;
-  grid-auto-columns: minmax(100px, auto);
 
 
-
-}
 
 .item {
   background: steelblue;
@@ -190,60 +67,6 @@ button {
   border: skyblue 1px solid;
 }
 
-.poster {
-  max-width: fit-content;
-  justify-self: center;
-  align-self: top;
-
-}
-
-.rating {
-  display: flex;
-  align-self: center;
-  justify-self: center;
-}
-
-
-
-.title {
-  height: 50px;
-}
-
-img {
-  max-width: 200px;
-}
-
-img:hover {
-  opacity: 0.6;
-}
-
-
-
-.info-box {
-  padding: 5px;
-  height: 450px;
-  overflow: hidden;
-}
-
-
-
-.actions {
-  display: grid;
-  align-self: center;
-  justify-self: center;
-  padding: 5px;
-}
-
-
-
-a,
-h4,
-h5,
-h6,
 p {
-
-  padding: 5px;
-  text-overflow: ellipsis;
-
-
+  text-indent: 20px;
 }
